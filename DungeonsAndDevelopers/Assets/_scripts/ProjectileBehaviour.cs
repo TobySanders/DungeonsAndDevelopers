@@ -5,12 +5,20 @@ public class ProjectileBehaviour : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public GameObject target;
-    public float speed = 0.5f;
+
+    public float Speed = 0.5f;
+    public int Damage = 1;
+    private GameObject _target;
 
     void Start()
     {
         
+    }
+
+    public void SetValues(GameObject target, int damage)
+    {
+        _target = target;
+        Damage = damage;
     }
 
     // Update is called once per frame
@@ -26,17 +34,18 @@ public class ProjectileBehaviour : MonoBehaviour
 
     private void UpdatePosition()
     {
-        transform.LookAt(target.transform);
-        transform.position += (target.transform.position - transform.position) * speed;
+        transform.LookAt(_target.transform);
+        transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, Speed);
+        //transform.position += (_target.transform.position - transform.position) * Speed; Vector3.
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Enemy")
         {
-            other.GetComponent<EnemyBehaviour>().ApplyDamage();
+            other.GetComponent<EnemyBehaviour>().ApplyDamage(Damage);
 
-            Destroy(gameObject, 1);
+            Destroy(gameObject);
         }
     }
 }

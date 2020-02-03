@@ -5,11 +5,14 @@ public class PlayerController : MonoBehaviour
     public float gridSize = 1f;
     public float speed = 0.5f;
     public float movementDeadzone = 0.0001f;
+    public int Initiative;
+    public int Id;
 
-    Vector3 destination;
-    Vector3 movement;
+    protected Vector3 destination;
+    protected Vector3 movement;
 
-    bool isMoving = false;
+    protected bool canMove = false;
+    protected bool canAct = false;
     
 
 
@@ -22,7 +25,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isMoving)
+        if (canMove)
         {
             GetMovementInput();
         }
@@ -33,30 +36,42 @@ public class PlayerController : MonoBehaviour
         UpdatePosition();
     }
 
+    public virtual void RollInitiative()
+    {
+        Initiative = Random.Range(0,20);
+    }
+
+    public virtual void FireProjectile(GameObject target, int damage)
+    {
+    }
+
+    public virtual void StartTurn()
+    {
+        Debug.Log($"starting turn for player id:{Id}");
+        canMove = true;
+        canAct = true;
+    }
+
+    public virtual void GetMovementInput()
+    {
+    }
+
+
+    public virtual void OnTriggerEnter(Collider other)
+    {
+    }
+
     private void UpdatePosition()
     {
-        if(Vector3.Distance(destination, transform.position) <= movementDeadzone)
-        {
-            destination = transform.position;
-            isMoving = false;
-            return;
-        }
+        //if(Vector3.Distance(destination, transform.position) <= movementDeadzone)
+        //{
+        //    destination = transform.position;
+        //    return;
+        //}
+
         movement = (destination - transform.position) * speed;
         transform.position += movement;
     }
 
-    private void GetMovementInput()
-    {
-        //destination += Vector3.forward * gridSize * Input.GetAxisRaw("Vertical");
-        destination += Vector3.right * gridSize * Input.GetAxisRaw("Horizontal");
-        isMoving = true;
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.tag == "Enemy")
-        {
-            
-        }
-    }
 }
