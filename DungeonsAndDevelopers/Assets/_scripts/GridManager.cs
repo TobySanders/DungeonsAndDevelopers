@@ -50,17 +50,17 @@ public class GridManager : MonoBehaviour
         var result = new Vector2();
 
         result.x = Mathf.Round(position.x) * _tileSize.x;
-        result.y = Mathf.Round(position.y) * _tileSize.y;
+        result.y = Mathf.Round(position.z) * _tileSize.z;
 
-        if (position.x > GridDimensions.x)
-            result.x = GridDimensions.x;
-        if (position.x < _origin.x)
+        if (position.x >= GridDimensions.x)
+            result.x = GridDimensions.x -1;
+        else if (position.x < _origin.x)
             result.x = _origin.x;
 
-        if (position.z > GridDimensions.y)
-            result.y = GridDimensions.y;
-        if (position.z < GridDimensions.y)
-            result.y = _origin.y;
+        if (position.z >= GridDimensions.y)
+            result.y = GridDimensions.y -1;
+        else if (position.z < _origin.z)
+            result.y = _origin.z;
       
         return result;
     }
